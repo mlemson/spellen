@@ -3212,6 +3212,145 @@
     .locus-online-deck > span { padding:7px 8px; border:1px solid var(--line); border-radius:10px; background:var(--surface-soft); text-align:center; font-size:.7rem; color:var(--muted); }
     .locus-online-deck strong { display:block; color:var(--ink); font-size:.85rem; }
 
+
+
+    /* ============================================================
+       CLEVER DARK MODE REFINEMENT 2.43
+       Donkere papierlook, donkere scorepanelen en gedempte kleurzones.
+       ============================================================ */
+    [data-theme="dark"] #clever-game-layout,
+    [data-theme="dark"] #clever-editor-shell,
+    [data-theme="dark"] #clever-generator-shell {
+      --clever-ink: #edf2ee;
+      --clever-muted: #aab4af;
+      --clever-paper: #1f252a;
+      --clever-bg: #2b3238;
+      --clever-line: #3a444b;
+      --clever-shadow: 0 14px 34px rgba(0,0,0,.24);
+      --clever-shadow-soft: 0 6px 16px rgba(0,0,0,.18);
+      --clever-yellow: #c6a63d;
+      --clever-blue: #4c8fb5;
+      --clever-green: #5f9160;
+      --clever-orange: #b9754c;
+      --clever-purple: #83629e;
+      --clever-pink: #b86a89;
+      --clever-teal: #4da39e;
+      --clever-brown: #9a7258;
+      --clever-silver: #879196;
+      --clever-grey: #717b80;
+      --clever-danger: #d95d55;
+    }
+    [data-theme="dark"] #clever-game-layout .clever-sheet-card,
+    [data-theme="dark"] #clever-editor-shell .preview-card,
+    [data-theme="dark"] #clever-generator-shell .preview-card {
+      background: linear-gradient(180deg, #20262b, #1b2025);
+      border-color: var(--clever-line);
+      box-shadow: var(--clever-shadow);
+    }
+    [data-theme="dark"] #clever-game-layout .dice-card,
+    [data-theme="dark"] #clever-game-layout .score-card,
+    [data-theme="dark"] #clever-game-layout .history-card {
+      background: linear-gradient(180deg, #23292f, #1d2328);
+      border-color: var(--clever-line);
+      box-shadow: var(--clever-shadow-soft);
+      color: var(--clever-ink);
+    }
+    [data-theme="dark"] #clever-game-layout .score-row,
+    [data-theme="dark"] #clever-game-layout .score-row span,
+    [data-theme="dark"] #clever-game-layout .clever-score-note,
+    [data-theme="dark"] #clever-game-layout .section-kicker,
+    [data-theme="dark"] #clever-game-layout .dice-card .subtle,
+    [data-theme="dark"] #clever-game-layout .dice-card .muted,
+    [data-theme="dark"] #clever-game-layout .dice-card p {
+      color: var(--clever-muted);
+    }
+    [data-theme="dark"] #clever-game-layout .score-row strong,
+    [data-theme="dark"] #clever-game-layout .clever-total strong,
+    [data-theme="dark"] #clever-game-layout .clever-sheet-head strong,
+    [data-theme="dark"] #clever-game-layout .clever-variant-badge,
+    [data-theme="dark"] #clever-game-layout .dice-card strong,
+    [data-theme="dark"] #clever-game-layout .dice-card b {
+      color: var(--clever-ink);
+    }
+    [data-theme="dark"] #clever-game-layout .clever-total,
+    [data-theme="dark"] #clever-game-layout .clever-command-board {
+      background: #2b3238;
+      border-color: var(--clever-line);
+    }
+    [data-theme="dark"] #clever-game-layout .clever-variant-badge,
+    [data-theme="dark"] #clever-game-layout .clever-round-cell,
+    [data-theme="dark"] #clever-game-layout .clever-action-card,
+    [data-theme="dark"] #clever-game-layout .clever-die-slot,
+    [data-theme="dark"] #clever-game-layout .clever-prompt {
+      background: #313940;
+      border-color: #424d55;
+      color: var(--clever-muted);
+    }
+    [data-theme="dark"] #clever-game-layout .clever-round-cell.current {
+      background: #3a4249;
+    }
+    [data-theme="dark"] #clever-game-layout .clever-round-cell.done {
+      background: #38413f;
+    }
+    [data-theme="dark"] #clever-game-layout .clever-die-slot {
+      border-color: #46515a;
+      background: #2d353c;
+    }
+    [data-theme="dark"] #clever-game-layout .clever-die-slot.filled {
+      background: color-mix(in srgb, var(--slot-color) 22%, #2f373e);
+      border-color: color-mix(in srgb, var(--slot-color) 58%, #4a545c);
+      color: var(--clever-ink);
+    }
+    [data-theme="dark"] #clever-game-layout .clever-section {
+      color: var(--clever-ink);
+      border-color: color-mix(in srgb, var(--clever-zone) 35%, var(--clever-line));
+      box-shadow: inset 0 1px rgba(255,255,255,.02);
+    }
+    [data-theme="dark"] #clever-game-layout .clever-section.yellow { background: #3f3a27 !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.blue { background: #293b47 !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.green { background: #2b3b2c !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.orange { background: #403228 !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.purple { background: #373040 !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.silver,
+    [data-theme="dark"] #clever-game-layout .clever-section.grey { background: #333a3f !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.teal { background: #29403f !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.brown { background: #3e332d !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section.pink { background: #40303a !important; }
+    [data-theme="dark"] #clever-game-layout .clever-section-head strong,
+    [data-theme="dark"] #clever-game-layout .clever-section-head span { color: var(--clever-ink); }
+    [data-theme="dark"] #clever-game-layout .clever-section-head span { opacity: .82; }
+    [data-theme="dark"] #clever-game-layout .clever-box {
+      background: rgba(255,255,255,.08);
+      border-color: color-mix(in srgb, var(--clever-zone) 28%, #4a545c);
+      color: var(--clever-ink);
+      box-shadow: inset 0 1px rgba(255,255,255,.02);
+    }
+    [data-theme="dark"] #clever-game-layout .clever-box.filled,
+    [data-theme="dark"] #clever-game-layout .clever-box.marked,
+    [data-theme="dark"] #clever-game-layout .clever-box.crossed {
+      background: rgba(255,255,255,.12);
+      border-color: color-mix(in srgb, var(--clever-zone) 40%, #57626b);
+    }
+    [data-theme="dark"] #clever-game-layout .clever-box.blocked,
+    [data-theme="dark"] #clever-game-layout .clever-box.skipped {
+      background: rgba(0,0,0,.12);
+      border-color: #4a545c;
+      opacity: .5;
+    }
+    [data-theme="dark"] #clever-game-layout .clever-box.valid-target {
+      background: rgba(255,255,255,.15);
+      box-shadow: 0 0 0 2px #20262b, 0 0 0 4px var(--clever-zone);
+    }
+    [data-theme="dark"] #clever-game-layout .c4-yellow-total,
+    [data-theme="dark"] #clever-game-layout .c4-blue-label {
+      background: rgba(255,255,255,.09);
+      border-color: #49545d;
+      color: var(--clever-ink);
+    }
+    [data-theme="dark"] #clever-game-layout .bonus-badge {
+      box-shadow: 0 2px 6px rgba(0,0,0,.18);
+    }
+
 </style>
 </head>
 <body>
