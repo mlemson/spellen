@@ -3420,6 +3420,92 @@
       box-shadow: inset 0 0 0 2px rgba(255,255,255,.14);
     }
 
+
+
+    /* ============================================================
+       CLEVER 3 / CHALLENGE I LAYOUT REFINEMENT 2.46
+       Meer zoals het echte blad: score-bursts, compacte bonusrails
+       en betere vakverhoudingen. Geen letterlijke kopie van de foto.
+       ============================================================ */
+    .c3-score-rail {
+      display:grid;
+      gap:6px;
+      align-items:end;
+      margin:0 0 8px;
+    }
+    .c3-score-rail.cols-6 { grid-template-columns:repeat(6,minmax(0,1fr)); }
+    .c3-score-rail.cols-11 { grid-template-columns:repeat(11,minmax(44px,1fr)); min-width:544px; }
+    .c3-score-rail.cols-12 { grid-template-columns:repeat(12,minmax(44px,1fr)); min-width:594px; }
+    .c3-score-rail > .clever-score-burst { justify-self:center; }
+    .c3-grid6,
+    .c3-yellow-rows,
+    .c3-teal-rows { display:grid; gap:6px; }
+    .c3-grid6 { grid-template-columns:repeat(6,minmax(0,1fr)); }
+    .c3-yellow-rows .c3-grid6 .clever-box,
+    .c3-teal-rows .c3-grid6 .clever-box { min-height:42px; }
+    .c3-top-note { margin-top:8px; }
+    .c3-passive-tag { display:block; margin-top:2px; font-size:.56rem; line-height:1.1; color:var(--clever-muted); font-weight:900; text-transform:uppercase; letter-spacing:.02em; }
+    .c3-bonus-rail {
+      display:grid;
+      gap:7px;
+      margin-top:8px;
+    }
+    .c3-bonus-rail.cols-4 { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .c3-bonus-rail.cols-5 { grid-template-columns:repeat(5,minmax(0,1fr)); }
+    .c3-bonus-node {
+      min-height:34px;
+      padding:5px 8px;
+      border-radius:10px;
+      border:1px solid color-mix(in srgb,var(--clever-zone) 34%,var(--clever-line));
+      background:rgba(255,255,255,.56);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      color:var(--clever-muted);
+      font-size:.68rem;
+      font-weight:850;
+      text-align:center;
+    }
+    .c3-bonus-node strong { color:var(--clever-ink); }
+    .c3-sequence-wrap,
+    .c3-pink-wrap { overflow-x:auto; padding:3px 1px 7px; }
+    .c3-sequence-wrap .clever-sequence,
+    .c3-pink-wrap .clever-track,
+    .c3-brown-wrap .clever-track { min-width:0; }
+    .c3-blue-center {
+      min-width:44px;
+      min-height:48px;
+      border-radius:10px;
+      border:1.25px solid color-mix(in srgb,var(--clever-blue) 46%,var(--clever-line));
+      background:rgba(255,255,255,.92);
+      color:var(--clever-ink);
+      font-weight:950;
+      display:grid;
+      place-items:center;
+      box-shadow:inset 0 1px rgba(255,255,255,.8);
+    }
+    .c3-brown-wrap,
+    .c3-pink-wrap { overflow-x:auto; padding:3px 1px 7px; }
+    .c3-pink-track { grid-template-columns:repeat(11,minmax(46px,1fr)); min-width:614px; }
+    .c3-pink-track .clever-box,
+    .c3-pink-track .clever-split.vertical { min-height:48px; }
+    .c3-pink-track .clever-split.vertical .clever-box { min-height:22px; font-size:.66rem; }
+    .c3-pink-stars .clever-score-burst { width:40px; }
+    .c3-yellow .clever-section-head,
+    .c3-teal .clever-section-head,
+    .c3-blue .clever-section-head,
+    .c3-brown .clever-section-head,
+    .c3-pink .clever-section-head { margin-bottom:9px; }
+    @media (max-width: 860px) {
+      .c3-bonus-rail.cols-4,
+      .c3-bonus-rail.cols-5 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .c3-score-rail.cols-6 { gap:4px; }
+    }
+    [data-theme="dark"] .c3-bonus-node { background:rgba(255,255,255,.08); }
+    [data-theme="dark"] .c3-blue-center { background:rgba(255,255,255,.10); box-shadow:inset 0 1px rgba(255,255,255,.03); }
+    [data-theme="dark"] .c3-passive-tag { color:rgba(237,242,238,.72); }
+
 </style>
 </head>
 <body>
@@ -8480,15 +8566,18 @@
 
     function renderCleverFamily3(s,scores,valid){
       const v=cleverVariant(),yellow=v.challenge?C3_YELLOW_CHALLENGE:C3_YELLOW,passive=v.challenge?C3_PASSIVE_CHALLENGE:C3_PASSIVE;
-      const y=yellow.map((n,i)=>cleverButton(`yellow:${i}`,`${n}${passive.includes(i)?'<span class="cell-sub">passief</span>':''}`,s.score.yellow.includes(i)?'marked':'',valid)).join('');
-      const teal=Array.from({length:30},(_,i)=>cleverButton(`teal:${i}`,(i%6)+1,s.score.teal.includes(i)?'marked':'',valid)).join('');
+      const yellowBursts=[2,6,12,20,30,42],tealBursts=[1,3,6,10,15,21],brownBursts=[1,5,9,14,20,27,35,44,54,65,77,90];
+      const yellowRows=Array.from({length:3},(_,r)=>`<div class="c3-grid6">${Array.from({length:6},(_,c)=>{const i=r*6+c;return cleverButton(`yellow:${i}`,`${yellow[i]}${passive.includes(i)?'<span class="cell-sub c3-passive-tag">passief</span>':''}`,s.score.yellow.includes(i)?'marked':'',valid)}).join('')}</div>`).join('');
+      const tealRows=Array.from({length:5},(_,r)=>`<div class="c3-grid6">${Array.from({length:6},(_,c)=>{const i=r*6+c;return cleverButton(`teal:${i}`,(c+1),s.score.teal.includes(i)?'marked':'',valid)}).join('')}</div>`).join('');
       const left=Array.from({length:5},(_,j)=>{const i=4-j;return cleverButton(`blueleft:${i}`,s.score.blueLeft[i]??'←',i<s.score.blueLeft.length?'filled':'',valid)}).join('');
       const right=Array.from({length:5},(_,i)=>cleverButton(`blueright:${i}`,s.score.blueRight[i]??'→',i<s.score.blueRight.length?'filled':'',valid)).join('');
       const maps={blue:{2:'reroll',4:'teal5',6:'plus',8:'fox'},brown:{2:'yellow4',4:'number',6:'fox',8:'pink6',10:'plus'},pink:{3:'reroll',5:'brown3',7:'plus',9:'fox'}};
       const brown=(v.challenge?C3_BROWN_CHALLENGE:C3_BROWN).map((n,i)=>cleverButton(`brown:${i}`,`${n}${cleverBonusBadge(cleverBonusAt(`brown${i+1}`,maps.brown[i+1]),true)}`,s.score.brown.includes(i)?'marked':i<(s.score.brown.at(-1)??-1)?'skipped':'',valid)).join('');
       const pink=Array.from({length:11},(_,i)=>{const badge=cleverBonusBadge(cleverBonusAt(`pink${i+1}`,maps.pink[i+1]),true);if(i<s.score.pink.length)return `<div class="clever-box filled">${s.score.pink[i]?.value??s.score.pink[i]}${badge}</div>`;if(i>s.score.pink.length)return '<div class="clever-box blocked">—</div>';return `<div class="clever-split vertical">${cleverButton(`pinkbonus:${i}`,`½ +${badge}`,'',valid)}${cleverButton(`pinkpoints:${i}`,`×${C3_PINK_STARS[i]}`,'',valid)}</div>`}).join('');
       const tealBon=['reroll','yellow3','number','fox','plus'];
-      return `<div class="clever-top"><section class="clever-section yellow"><div class="clever-section-head"><strong>Geel</strong><span>${scores.yellow} pt · rij I, II of III per worp${v.challenge?' · volle kolom +3':''}</span></div><div class="clever-grid six compact">${y}</div><p class="clever-score-note">‘passief’ betekent: alleen beschikbaar in de passieve worp.</p></section><section class="clever-section teal"><div class="clever-section-head"><strong>Turkoois</strong><span>${scores.teal} pt · gelijke dobbelstenen geven extra kruisen</span></div><div class="clever-grid six compact">${teal}</div><div class="bonus-preview">${tealBon.map((x,r)=>`<span class="bonus-preview-item">rij ${r+1} ${cleverBonusBadge(cleverBonusAt(`trow${r}`,x))}</span>`).join('')}</div></section></div><section class="clever-section blue"><div class="clever-section-head"><strong>Blauw + wit</strong><span>${scores.blue} pt · volg de stap; een 7 mag altijd</span></div><div class="clever-track-wrap"><div class="clever-sequence">${left}<div class="clever-box filled">7</div>${right}</div></div><div class="bonus-preview">${Object.entries(maps.blue).map(([n,x])=>`<span class="bonus-preview-item">na ${n} ${cleverBonusBadge(cleverBonusAt(`blue${n}`,x))}</span>`).join('')}</div></section><section class="clever-section brown"><div class="clever-section-head"><strong>Bruin</strong><span>${scores.brown} pt · vooruit springen mag, teruggaan niet</span></div><div class="clever-track-wrap"><div class="clever-track">${brown}</div></div></section><section class="clever-section pink"><div class="clever-section-head"><strong>Roze</strong><span>${scores.pink} pt · kies bonus of vermenigvuldigde punten</span></div><div class="clever-track-wrap"><div class="clever-track">${pink}</div></div></section>`;
+      const tealBonusRail=tealBon.map((x,r)=>`<span class="c3-bonus-node"><strong>rij ${r+1}</strong>${cleverBonusBadge(cleverBonusAt(`trow${r}`,x))}</span>`).join('');
+      const blueBonusRail=Object.entries(maps.blue).map(([n,x])=>`<span class="c3-bonus-node"><strong>na ${n}</strong>${cleverBonusBadge(cleverBonusAt(`blue${n}`,x))}</span>`).join('');
+      return `<div class="clever-top"><section class="clever-section yellow c3-yellow"><div class="clever-section-head"><strong>Geel</strong><span>${scores.yellow} pt · rij I, II of III per worp${v.challenge?' · volle kolom +3':''}</span></div><div class="c3-score-rail cols-6">${yellowBursts.map(n=>cleverScoreBurst(n,'yellow')).join('')}</div><div class="c3-yellow-rows">${yellowRows}</div><p class="clever-score-note c3-top-note">‘passief’ betekent: alleen beschikbaar in de passieve worp.</p></section><section class="clever-section teal c3-teal"><div class="clever-section-head"><strong>Turkoois</strong><span>${scores.teal} pt · gelijke dobbelstenen geven extra kruisen</span></div><div class="c3-score-rail cols-6">${tealBursts.map(n=>cleverScoreBurst(n,'blue')).join('')}</div><div class="c3-teal-rows">${tealRows}</div><div class="c3-bonus-rail cols-5">${tealBonusRail}</div></section></div><section class="clever-section blue c3-blue"><div class="clever-section-head"><strong>Blauw + wit</strong><span>${scores.blue} pt · volg de stap; een 7 mag altijd</span></div><div class="c3-sequence-wrap"><div class="clever-sequence">${left}<div class="c3-blue-center">7</div>${right}</div></div><div class="c3-bonus-rail cols-4">${blueBonusRail}</div></section><section class="clever-section brown c3-brown"><div class="clever-section-head"><strong>Bruin</strong><span>${scores.brown} pt · vooruit springen mag, teruggaan niet</span></div><div class="c3-brown-wrap"><div class="c3-score-rail cols-12">${brownBursts.map(n=>cleverScoreBurst(n,'purple')).join('')}</div><div class="clever-track">${brown}</div></div></section><section class="clever-section pink c3-pink"><div class="clever-section-head"><strong>Roze</strong><span>${scores.pink} pt · kies bonus of vermenigvuldigde punten</span></div><div class="c3-pink-wrap"><div class="c3-score-rail cols-11 c3-pink-stars">${C3_PINK_STARS.map(n=>cleverScoreBurst(`×${n}`,'pink')).join('')}</div><div class="clever-track c3-pink-track">${pink}</div></div></section>`;
     }
 
     function renderCleverFamily4(s,scores,valid){
