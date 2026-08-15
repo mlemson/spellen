@@ -1,0 +1,6 @@
+Speelveldstudio 2.40 Online build checks
+- JavaScript syntax: PASS (node --check)
+- Locus shared-deck state-machine test: PASS
+- Shared multiplayer ending/result collection test: PASS
+- KOK3 simultaneous winner ranking test: PASS
+- Real two-device WebRTC test: NOT RUN in build sandbox; see TESTPLAN.md
