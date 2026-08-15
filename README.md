@@ -67,12 +67,13 @@ De bestaande 2.39-synchronisatie blijft aanwezig:
 
 ## Publiceren op GitHub Pages
 
-1. Maak een repository, bijvoorbeeld `speelveldstudio-online`.
-2. Upload **de inhoud van deze map** naar `main`; `index.html` en `.nojekyll` moeten in de hoofdmap staan.
-3. Open **Settings → Pages**.
-4. Kies **Deploy from a branch**.
-5. Kies `main` en `/(root)`.
-6. Sla op en open de Pages-URL die GitHub toont.
+Voor deze repository (`mlemson/spellen`) staat de site direct in de root:
+
+1. Zorg dat `index.html` en `.nojekyll` in `main` in de hoofdmap staan.
+2. Open **Settings → Pages**.
+3. Kies **Deploy from a branch**.
+4. Kies `main` en `/(root)`.
+5. Sla op en open daarna `https://mlemson.github.io/spellen/`.
 
 Er is geen buildstap nodig.
 
