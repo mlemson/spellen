@@ -67,6 +67,8 @@ try {
   // Actiebalk gebruikt originele afbeeldingen maar nooit de grote 100px varianten.
   const roll = page.locator('[data-action="clever-roll"]');
   if(await roll.isVisible()) await roll.click();
+  // De dobbelanimatie verbergt de actiebalk tot de worp afgerond is.
+  await page.locator('#clever-dice .clever-action-btn > .clever-literal-icon').first().waitFor({ state: 'visible', timeout: 15000 });
   const actionIconSizes = await page.locator('#clever-dice .clever-action-btn > .clever-literal-icon').evaluateAll(images =>
     images.map(image => Math.round(image.getBoundingClientRect().width)));
   assert.ok(actionIconSizes.length >= 2, 'Reroll/extra original action icons exist');
