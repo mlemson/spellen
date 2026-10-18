@@ -43,6 +43,35 @@ try {
 
   await launch('clever', '#clever-game-layout', /Clever/);
   assert.ok(await page.locator('#clever-sheet .clever-section').count() >= 5, 'Clever zones preserved');
+
+  // Geijkte Clever-afmetingen op desktop; alle officiële bonusiconen behouden.
+  const cleverDesktop = await page.evaluate(() => {
+    const layout = document.getElementById('clever-game-layout');
+    const sidebar = layout.querySelector('.side-stack');
+    const firstZone = layout.querySelector('.clever-section');
+    const width = el => Math.round(el.getBoundingClientRect().width);
+    return {
+      right: width(sidebar),
+      left: width(layout.querySelector('.clever-sheet-card')),
+      zoneCount: layout.querySelectorAll('.clever-section').length,
+      originalImages: layout.querySelectorAll('.clever-literal-icon').length,
+      originalImageSourcesPresent: [...layout.querySelectorAll('.clever-literal-icon')].every(img => Boolean(img.getAttribute('src'))),
+      firstZone: firstZone && width(firstZone),
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+    };
+  });
+  assert.ok(cleverDesktop.right >= 284 && cleverDesktop.right <= 300, 'Compact sidebar: '+JSON.stringify(cleverDesktop));
+  assert.ok(cleverDesktop.left > cleverDesktop.right * 2, 'Main score sheet dominates');
+  assert.ok(cleverDesktop.zoneCount >= 5 && cleverDesktop.originalImages >= 3 && cleverDesktop.originalImageSourcesPresent, 'Original scoring icons kept');
+  assert.ok(cleverDesktop.overflow <= 3, 'Desktop no horizontal scroll: '+JSON.stringify(cleverDesktop));
+  // Actiebalk gebruikt originele afbeeldingen maar nooit de grote 100px varianten.
+  const roll = page.locator('[data-action="clever-roll"]');
+  if(await roll.isVisible()) await roll.click();
+  const actionIconSizes = await page.locator('#clever-dice .clever-action-btn > .clever-literal-icon').evaluateAll(images =>
+    images.map(image => Math.round(image.getBoundingClientRect().width)));
+  assert.ok(actionIconSizes.length >= 2, 'Reroll/extra original action icons exist');
+  assert.ok(actionIconSizes.every(w => w >= 14 && w <= 22), 'Action icons are restrained: '+JSON.stringify(actionIconSizes));
+
   await launch('qwixx', '#classic-game-layout', /Qwixx/);
   await launch('kok', '#kok-game-layout', /Keer op Keer|Klaar voor nog een keer/);
   await launch('railroad', '#classic-game-layout', /Railroad Ink/);
@@ -79,6 +108,28 @@ try {
   await page.locator('#studio-home [data-studio-action="help"]').click();
   await page.locator('#help-dialog[open]').waitFor({ state: 'visible' });
   await page.locator('#help-dialog [data-close]').first().click();
+
+
+  // Clever op een tablet én smalle telefoon: geen verdwenen scorevakken.
+  await page.setViewportSize({ width: 820, height: 900 });
+  await home();
+  await page.locator('.studio-game-card[data-family="clever"] [data-studio-play]').click();
+  assert.equal(await page.locator('#clever-game-layout .clever-section').count() >= 5, true);
+  const tablet = await page.evaluate(() => ({
+    direction: getComputedStyle(document.getElementById('clever-game-layout')).flexDirection,
+    overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+  }));
+  assert.equal(tablet.direction, 'column');
+  assert.ok(tablet.overflow <= 3, 'Tablet without document overflow: '+JSON.stringify(tablet));
+  await page.setViewportSize({ width: 390, height: 844 });
+  const narrow = await page.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    firstZone: document.querySelector('#clever-game-layout .clever-section')?.getBoundingClientRect().width,
+    diceAvailable: !!document.querySelector('#clever-dice')
+  }));
+  assert.ok(narrow.overflow <= 3, 'Mobile Clever without document overflow: '+JSON.stringify(narrow));
+  assert.ok(narrow.firstZone > 280 && narrow.diceAvailable, 'Clever remains playable on mobile');
+  await home();
 
   // Mobile: library should not force document-level horizontal scrolling.
   await page.setViewportSize({ width: 390, height: 844 });
