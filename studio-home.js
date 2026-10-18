@@ -177,7 +177,7 @@
     const play=event.target.closest('[data-studio-play]');
     if(play){const family=play.dataset.studioPlay;const info=catalog.find(function(x){return x.id===family;});const variant=homepage.querySelector('[data-studio-variant="'+family+'"]');if(info)openPlaying(variant?variant.value:info.first);return;}
     const view=event.target.closest('[data-studio-view]');
-    if(view){setHome(false);const original=nav.querySelector('[data-view="'+view.dataset.studioView+'"]');if(original && !original.hidden) original.click();else openPlaying();return;}
+    if(view){setHome(false);let original=nav.querySelector('[data-view="'+view.dataset.studioView+'"]');if(original && original.hidden && (view.dataset.studioView==='editor'||view.dataset.studioView==='generator')){selector.value='kok1';selector.dispatchEvent(new Event('change',{bubbles:true}));original=nav.querySelector('[data-view="'+view.dataset.studioView+'"]');}if(original && !original.hidden) original.click();else openPlaying();return;}
     const action=event.target.closest('[data-studio-action]');
     if(!action)return;
     switch(action.dataset.studioAction){
