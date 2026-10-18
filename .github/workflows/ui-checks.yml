@@ -1,0 +1,30 @@
+name: Controleer spellenkast en spelbediening
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'studio-home.js'
+      - 'studio-redesign.css'
+      - 'tests/studio-ui.mjs'
+      - '.github/workflows/ui-checks.yml'
+  workflow_dispatch:
+jobs:
+  ui-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Installeer testbrowser
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Start lokale website
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/studio-http.log 2>&1 &
+          sleep 2
+      - name: Controleer menu, scorebladen en navigatie
+        run: node tests/studio-ui.mjs
